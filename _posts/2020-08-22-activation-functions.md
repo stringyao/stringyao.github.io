@@ -10,7 +10,8 @@ image: "/images/activation_functions.jpg"
 
 早期的神经网络主要使用sigmoidal类型的激活函数，比如```hyperbolic tangent (tanh)```以及```logistic sigmoid```。
 
-![sigmoid vs. tanh](/images/sigmoidal_funcs.png)
+
+![sigmoid vs. tanh](/images/sigmoidal_funcs.png#center) 
 
 
 这种类型的激活函数存在一个问题：当隐层神经单元接近-1/0/1的饱和状态时，其梯度会消失(vanishing gradient problem)，导致模型收敛速度降低，甚至收敛到局部最小值。因此需要十分注意隐层单元的初始化。另外一个问题则是此类激活函数无法得到一个稀疏的表征(sparse repre- sentation)。
