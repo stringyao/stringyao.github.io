@@ -30,22 +30,14 @@ h^{(i)} = 0.01 * w ^ {(i)T}x, w ^ {(i)T}x < 0
 
 此时我们可以得到更稳健的梯度(有可能提高收敛速度)，但也失去了绝对稀疏性(hard-zero sparsity)。至于稀疏性到底有什么重要性，这里简单提一下：稀疏的表征对输入的扰动(噪音)更不敏感，泛化能力更强。ReLu类型的激活函数能够产生更加稀疏的表征，信息在不同的神经单元里均匀分布。
 
+Leaky ReLu使用了一个固定的0.01超参数，然而这个数字背后并没有完备的理论依据。Randomized Leaky Rectified Linear Units (RReLUs)对其进行随机赋值，而Kaiming He将其扩展为参数化的ReLu，即Parametric Rectified Linear Unit (PReLU)，使得ReLu中的负梯度(非线性)可以通过学习自我调整。其论文发现在CNN图片识别任务中，PReLu效果更好，且顶部的卷积层后面接的PReLu往往比底部参数更大，表明顶部保留了更多信息，而底部则通过更多非线性得到更抽象的表征。
 
+PReLu之后的又一变体是exponential linear unit (ELU)，其提出者认为ReLu的非负性导致其平均激活后的数值大于零，而这些大于零的值会形成下一层网络的偏置(bias)，大量强相关性的神经元会加重这一偏置。ELU则将重心放在解决这一偏置上，使得梯度更接近于自然梯度，从而提高模型收敛速度。在此之后还有scaled exponential linear units等等，但是这些ReLu的变体虽然有着这样那样的理论依据，似乎都没有足够的说服力表面其确实优于ReLu。目前来看，激活函数仍然是ReLu一统江湖。
 
+在对激活函数进行各种魔改之前，也许我们应该仔细想想ReLu成功的根本原因。Le Quoc利用强化学习对激活函数做了探索，并提出了Swish:
 
+\[
+f(x) = x * (1 + \exp(-x))^{-1}
+\]
 
-
-
-
-
-
-
-
-## How to Use This Theme
-Just go ahead and read up on [how to install Jekyll](https://jekyllrb.com/). It's not too hard I promise!
-
-Download this repository [here](https://github.com/iwiedenm/jekyll-theme-massively) and save it to any folder you want.
-
-Open a terminal window or a command line and ```cd``` to that location.
-
-Then enter: ```bundle exec jekyll serve```. You can now access your new Jekyll site from [http://127.0.0.1:4000/](http://127.0.0.1:4000/). Have fun exploring your new site!
+Swish具有光滑且非单调递增两个特点
